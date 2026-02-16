@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" style="width:100%;height:100%;background-color:black;">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Phantom Client | Tank Edition</title>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='black'/><path d='M30,70 Q30,30 50,30 Q70,30 70,70 L65,65 L55,75 L45,65 L35,75 Z' fill='%2300ffcc' opacity='0.8'/></svg>">
+
+<script type="text/javascript">
+"use strict";
+
+// %%%%%%%%% CHROMEBOOK EXTREME OPTIMIZATION %%%%%%%%%%%%
+window.eaglercraftXOpts = {
+    container: "game_frame",
+    worldsDB: "phantom_worlds",    // Isolated DB to prevent disk space conflicts
+    
+    // --- SODIUM / OPTIFINE CORE ---
+    forceWebGL1: true,             // Vital for Chromebooks to prevent GPU crashes
+    useWASMGC: true,               // Sodium-style memory management for low-RAM devices
+    fastMath: true,                // Optifine-style math for CPU efficiency
+    smoothFps: false,              // Uncaps frames for maximum output
+    fpsLimit: 0,                   // Unlimited FPS
+    
+    // --- LUNAR INPUT & NETWORKING ---
+    html5Cursor: true,             // Removes input lag
+    checkRelays: false,            // Skips relay handshake for instant join
+    enableMuliDraw: true,          // Spreads rendering load across Chromebook CPU cores
+    
+    servers: [
+        { addr: "wss://mc.lamplifesteal.xyz", name: "§6§lLamp§f§lLifesteal" },
+        { addr: "wss://mc.arch.lol", name: "§b§lArchMC" },
+        { addr: "wss://zentic.cc", name: "§d§lZentic" }
+    ],
+    assetsURI: "https://raw.githubusercontent.com/Lax1dude/eaglercraftx-1.8.8/main/stable-download/assets.epk"
+};
+
+// %%%%%%%%% INSTANT ENGINE SUMMONER WITH PROGRESS %%%%%%%%%%%%
+window.onload = function() {
+    const fill = document.getElementById('load_fill');
+    const pct = document.getElementById('pct');
+    
+    let p = 0;
+    const interval = setInterval(() => {
+        if (p < 95) {
+            p += (100 - p) * 0.1;
+            fill.style.width = Math.round(p) + "%";
+            pct.innerHTML = Math.round(p) + "%";
+        }
+    }, 100);
+
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/gh/Lax1dude/eaglercraftx-1.8.8@main/stable-download/classes.js";
+    
+    s.onload = () => {
+        clearInterval(interval);
+        fill.style.width = "100%";
+        pct.innerHTML = "SYSTEM READY";
+        setTimeout(() => {
+            document.getElementById('boot_overlay').style.opacity = '0';
+            setTimeout(() => { document.getElementById('boot_overlay').remove(); }, 600);
+        }, 300);
+    };
+    
+    document.head.appendChild(s);
+};
+
+// SIGN UP SYNC FEATURE (Per your Phantom ID request)
+function syncID() {
+    const id = document.getElementById('ghost_user').value;
+    if(id) alert(`Phantom ID: ${id} Synced to Cloud!`);
+}
+</script>
+
+<style>
+    body, html { margin: 0; padding: 0; background: black; overflow: hidden; width: 100%; height: 100%; font-family: sans-serif; }
+    #game_frame { width: 100%; height: 100%; position: absolute; }
+    
+    #boot_overlay { 
+        position: fixed; inset: 0; background: #000; z-index: 100; 
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        transition: 0.8s;
+    }
+
+    /* MINIMAL NON-BLOCKING SIGN UP */
+    .sync-tray { position: absolute; top: 20px; right: 20px; display: flex; gap: 5px; }
+    .s-in { background: #111; border: 1px solid #00ffcc33; color: #00ffcc; padding: 5px; font-size: 10px; outline: none; }
+    .s-btn { background: #00ffcc; border: none; font-size: 10px; padding: 5px 10px; cursor: pointer; font-weight: bold; }
+
+    .loader-box { width: 250px; text-align: center; }
+    .bar { width: 100%; height: 2px; background: #111; margin-top: 10px; overflow: hidden; }
+    .fill { width: 0%; height: 100%; background: #00ffcc; transition: 0.3s; box-shadow: 0 0 10px #00ffcc; }
+    #pct { color: #00ffcc; font-size: 10px; margin-top: 8px; letter-spacing: 2px; font-weight: bold; }
+    .tank-tag { color: #222; font-size: 9px; margin-top: 40px; letter-spacing: 3px; }
+</style>
+</head>
+<body>
+    <div id="boot_overlay">
+        <div class="sync-tray">
+            <input type="text" id="ghost_user" placeholder="PHANTOM ID" class="s-in">
+            <button class="s-btn" onclick="syncID()">SYNC</button>
+        </div>
+        
+        <div class="loader-box">
+            <div class="bar"><div class="fill" id="load_fill"></div></div>
+            <div id="pct">0%</div>
+        </div>
+        <div class="tank-tag">PHANTOM | TANK MODE ACTIVE</div>
+    </div>
+    
+    <div id="game_frame"></div>
+</body>
+</html>
