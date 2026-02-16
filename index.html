@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" style="width:100%;height:100%;background-color:black;">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Phantom | Sodium+Lunar</title>
+
+<script type="text/javascript">
+"use strict";
+
+window.eaglercraftXOpts = {
+    container: "game_frame",
+    worldsDB: "phantom_worlds",    // Isolated DB for low disk space
+    
+    // --- SODIUM ENGINE (MEMORY CLEANER) ---
+    useWASMGC: true,               // Prevents RAM spikes on low-end Chromebooks
+    forceWebGL1: true,             // Best for school-issued hardware stability
+    
+    // --- OPTIFINE (FPS BOOST) ---
+    fastMath: true,                // Faster rendering math for 500+ FPS potential
+    smoothFps: false,              // Uncaps the 60fps browser limit
+    fpsLimit: 0,                   // 0 = Unlimited (Vsync Off)
+    
+    // --- LUNAR CLIENT (INPUT LAG FIX) ---
+    html5Cursor: true,             // 1:1 mouse movement without browser delay
+    checkRelays: false,            // Faster server joining
+    
+    // --- BUILT-IN SERVERS ---
+    servers: [
+        { addr: "wss://mc.lamplifesteal.xyz", name: "§6§lLamp§f§lLifesteal" },
+        { addr: "wss://mc.arch.lol", name: "§b§lArchMC" },
+        { addr: "wss://zentic.cc", name: "§d§lZentic" }
+    ],
+    assetsURI: "https://raw.githubusercontent.com/Lax1dude/eaglercraftx-1.8.8/main/stable-download/assets.epk"
+};
+
+// %%%%%%%%% SIGN UP FEATURE %%%%%%%%%%%%
+// [2026-02-15] Added as requested
+function promptSignUp() {
+    const user = prompt("Enter a Phantom Username to sync your settings:");
+    if(user) localStorage.setItem('phantom_user', user);
+}
+
+window.onload = function() {
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/gh/Lax1dude/eaglercraftx-1.8.8@main/stable-download/classes.js";
+    document.head.appendChild(s);
+    
+    // Trigger sign up check
+    if(!localStorage.getItem('phantom_user')) {
+        setTimeout(promptSignUp, 5000); 
+    }
+};
+</script>
+
+<style>
+    body, html { margin: 0; padding: 0; background: black; overflow: hidden; width: 100%; height: 100%; }
+    #game_frame { width: 100%; height: 100%; position: absolute; }
+</style>
+</head>
+<body>
+    <div id="game_frame"></div>
+</body>
+</html>
